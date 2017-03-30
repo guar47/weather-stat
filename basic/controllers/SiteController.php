@@ -127,4 +127,9 @@ class SiteController extends Controller
     {
         return $this->render('say', ['message' => $message]);
     }
+
+    public function actionWeather()
+    {
+        return $this->render('weather');
+    }
 }
