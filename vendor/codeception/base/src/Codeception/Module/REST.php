@@ -1081,7 +1081,7 @@ EOF;
     }
 
     /**
-     * Checks wheather XML response matches XPath
+     * Checks weather XML response matches XPath
      *
      * ```php
      * <?php
@@ -1097,7 +1097,7 @@ EOF;
     }
 
     /**
-     * Checks wheather XML response does not match XPath
+     * Checks weather XML response does not match XPath
      *
      * ```php
      * <?php

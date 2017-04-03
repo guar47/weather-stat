@@ -20,5 +20,3 @@ $this->title = 'Weather statistics';
     ]);
     ?>
 </div>
-
-
