@@ -10,15 +10,23 @@ class WeatherController extends Controller
 {
     public function actionIndex()
     {
-        self::insert_weather_to_db(self::get_data_from_api());
-        $weather_table = new WeatherMoscow();
-        $weather_table->date_time = '2016-05-05';
-        $weather_table->daily_average_temp = -5;
-        $weather_table->nightly_average_temp = 0;
         $weather = self::get_data_from_api();
+
+        self::insert_weather_to_db($weather);
+
         return $this->render('index', [
                 'weather' => $weather,
+//                'weather_table' => $weather_table,
             ]);
+    }
+
+    public function actionDatabase()
+    {
+        $weather_table = WeatherMoscow::find()->all();
+
+        return $this->render('database', [
+                'weather_table' => $weather_table,
+        ]);
     }
 
     private function get_data_from_api()
@@ -42,6 +50,7 @@ class WeatherController extends Controller
     private function insert_weather_to_db($weather)
     {
         $weather_table = new WeatherMoscow();
+
         foreach ($weather as $daily_weather)
         {
             $weather_table->date_time = $daily_weather['date'];
@@ -58,15 +67,8 @@ class WeatherController extends Controller
 
             $weather_table->daily_average_temp = $daily_average;
             $weather_table->nightly_average_temp = $nightly_average;
+            $weather_table->save();
         }
     }
 
-//    public function actionIndex()
-//    {
-//        $temperatures = WeatherMoscow::find()->all();
-//
-//        return $this->render('index', [
-//            'temperatures' => $temperatures,
-//        ]);
-//    }
 }

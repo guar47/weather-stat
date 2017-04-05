@@ -25,14 +25,3 @@ return [
     'password' => '',
     'charset' => 'utf8',
 ];
-```
-You must create table structure following this commands:
-
-```mysql
-CREATE TABLE weather.weather_moscow
-(
-    date_time DATETIME,
-    daily_average_temp INT,
-    nightly_average_temp INT
-);
-```

@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 ?>
-    <h1>Weather</h1>
+<h1>database data</h1>
 <!--        <table>-->
 <!--        --><?php //foreach ($weather as $hourly_weather): ?>
 <!--                <tr>-->
@@ -18,5 +18,5 @@ use yii\helpers\Html;
     </tr>
 </table>
 
-<?php var_dump($weather) ?>
+<?php var_dump($weather_table) ?>
 <?php //var_dump($weather_table) ?>
