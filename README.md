@@ -34,3 +34,13 @@ return [
     'password' => '',
     'charset' => 'utf8',
 ];
+```
+
+OTHER COMMENTS
+-------------
+```
+- Chosing date is not working now.
+- To add data to the database from the public API, click the button "add data to DB" (on a trial basis, requested for January 2016)
+- If you request the data multiple times in the database is a duplicate, but the stats will be displayed correctly as at the moment data are only for January 2016
+- After add data, you can request the statistics by click "get statistics", with no data in the database the temperature will not be considered
+```

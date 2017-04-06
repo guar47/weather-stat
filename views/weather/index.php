@@ -1,22 +1,52 @@
 <?php
+
+use yii\jui\DatePicker;
 use yii\helpers\Html;
+use yii\helpers\Url;
+
+$this->title = 'Weather statistics index';
+
 ?>
-    <h1>Weather</h1>
-<!--        <table>-->
-<!--        --><?php //foreach ($weather as $hourly_weather): ?>
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                --><?//= Html::encode("{$hourly_weather}") ?><!--:-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--        --><?php //endforeach; ?>
-<!--        </table>-->
+<div class="site-index">
+    <br>
+    <table class="table">
+        <thead>
+        <tr>
+            <!--            <th></th>-->
+            <th></th>
+            <th>Январь</th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+        <tr>
+            <!--            <th>Неделя</th>-->
+            <th>ПН</th>
+            <th>ВТ</th>
+            <th>СР</th>
+            <th>ЧТ</th>
+            <th>ПТ</th>
+            <th>СБ</th>
+            <th>ВС</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
 
-<table>
-    <tr>
+            echo '<tr>';
+            foreach ($weather as $weather_day) {
+                $table_row = '<td>' . date('d M', strtotime($weather_day['date'])) . '(' . $weather_day['day_temp'] .
+                    ' / ' . $weather_day['night_temp'] . ')' . '</td>';
 
-    </tr>
-</table>
-
-<?php //var_dump($weather) ?>
-<?php //var_dump($weather_table) ?>
+                if ($weather_day['week_day'] === '0') {
+                    echo $table_row . '</tr>' . '<tr>';
+                } else {
+                    echo $table_row;
+                }
+            }
+        ?>
+        </tbody>
+    </table>
+</div>

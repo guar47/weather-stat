@@ -8,6 +8,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\jui\DatePicker;
+use yii\helpers\Url;
 
 
 AppAsset::register($this);
@@ -44,6 +46,26 @@ AppAsset::register($this);
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
+        <div class="site-index">
+
+            <?php
+            echo DatePicker::widget([
+                'attribute' => 'from_date',
+                'value' => '2016-01-01',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+            echo DatePicker::widget([
+                'attribute' => 'to_date',
+                'value' => '2016-02-01',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+            ?>
+            <?= '<br>' ?>
+            <?= '<br>' ?>
+            <?= Html::a('get statistic', Url::to(['weather/index'], true), ['class'=>'btn btn-primary']); ?>
+            <?= Html::a('add data to DB', Url::to(['weather/database'], true), ['class'=>'btn btn-primary']); ?>
+
+        </div>
         <?= $content ?>
     </div>
 </div>

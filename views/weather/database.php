@@ -1,22 +1,18 @@
 <?php
+
+use yii\jui\DatePicker;
 use yii\helpers\Html;
+use yii\helpers\Url;
+
+$this->title = 'Weather statistics database';
+
 ?>
-<h1>database data</h1>
-<!--        <table>-->
-<!--        --><?php //foreach ($weather as $hourly_weather): ?>
-<!--                <tr>-->
-<!--                    <td>-->
-<!--                --><?//= Html::encode("{$hourly_weather}") ?><!--:-->
-<!--                    </td>-->
-<!--                </tr>-->
-<!--        --><?php //endforeach; ?>
-<!--        </table>-->
-
-<table>
-    <tr>
-
-    </tr>
-</table>
-
-<?php //var_dump($weather_table) ?>
-<?php //var_dump($weather_table) ?>
+<div class="site-index">
+    <br>
+    <?= yii\bootstrap\Alert::widget([
+        'options' => [
+            'class' => 'alert-info'
+        ],
+        'body' => '<b>Success</b>, Data obtained from the API and added to the database'
+    ]); ?>
+</div>
