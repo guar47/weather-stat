@@ -4,32 +4,31 @@ namespace app\controllers;
 
 use yii\web\Controller;
 use yii\httpclient\Client;
-use app\models\WeatherMoscow;
+use app\models\Weather;
 
 class WeatherController extends Controller
 {
     public function actionIndex()
     {
-        $weather = self::get_data_from_api();
+        $weather = self::get_data_from_api('Moscow',
+            '2016-01-01', '2016-01-01',
+            '1', 'json');
 
         self::insert_weather_to_db($weather);
 
-        return $this->render('index', [
-                'weather' => $weather,
-//                'weather_table' => $weather_table,
-            ]);
+        return $this->render('index');
     }
 
     public function actionDatabase()
     {
-        $weather_table = WeatherMoscow::find()->all();
+        $weather_table = Weather::find()->all();
 
         return $this->render('database', [
                 'weather_table' => $weather_table,
         ]);
     }
 
-    private function get_data_from_api()
+    private function get_data_from_api($city, $start_date, $end_date, $time_interval, $format)
     {
         $client = new Client();
 
@@ -38,37 +37,39 @@ class WeatherController extends Controller
             ->setUrl('http://api.worldweatheronline.com/premium/v1/past-weather.ashx')
             ->setData([
                 'key' => 'e3ce250a888b400e83c110545170204',
-                'q' => 'Moscow',
-                'date' => '2016-01-01',
-                'enddate' => '2016-01-03',
-                'tp' => '1',
-                'format' => 'json'
+                'q' => $city,
+                'date' => $start_date,
+                'enddate' => $end_date,
+                'tp' => $time_interval,
+                'format' => $format
             ])
-            ->send()->data['data']['weather'];
+            ->send()->data['data'];
     }
 
     private function insert_weather_to_db($weather)
     {
-        $weather_table = new WeatherMoscow();
+        $request_city = $weather['request']['0']['query'];
 
-        foreach ($weather as $daily_weather)
+        foreach ($weather['weather'] as $daily_weather)
         {
-            $weather_table->date_time = $daily_weather['date'];
-            $daily_average = round(array_reduce($daily_weather['hourly'], function ($sum, $hourly_temp){
-                if ($hourly_temp['time'] >= 7 && $hourly_temp['time'] <= 23)
-                    $sum = $hourly_temp['tempC'] + $sum;
-                return $sum;
-            }, 0) / 16);
-            $nightly_average = round(array_reduce($daily_weather['hourly'], function ($sum, $hourly_temp){
-                if ($hourly_temp['time'] < 7)
-                    $sum = $hourly_temp['tempC'] + $sum;
-                return $sum;
-            }, 0) / 8);
+            $date = $daily_weather['date'];
 
-            $weather_table->daily_average_temp = $daily_average;
-            $weather_table->nightly_average_temp = $nightly_average;
-            $weather_table->save();
+            foreach ($daily_weather['hourly'] as $hourly_weather)
+            {
+                $weather_table = new Weather();
+                $hour = $hourly_weather['time'] !== '0' ? substr($hourly_weather['time'], 0, -2) : '0';
+                $temperature = $hourly_weather['tempC'];
+
+                $weather_table->date = $date;
+                $weather_table->hour = $hour;
+                $weather_table->temp = $temperature;
+                $weather_table->city = $request_city;
+                $weather_table->save();
+            }
         }
+        echo '<br>';
+        echo '<br>';
+        echo '<br>';
     }
 
 }

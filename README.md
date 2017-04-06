@@ -10,6 +10,15 @@ The minimum requirement by this project template that your Web server supports P
 INSTALLATION
 ------------
 
+```
+git clone https://github.com/guar47/weather_stat.git
+composer install
+```
+And after database configuration
+```
+php yii migrate
+```
+
 CONFIGURATION
 -------------
 

@@ -18,5 +18,5 @@ use yii\helpers\Html;
     </tr>
 </table>
 
-<?php var_dump($weather_table) ?>
+<?php //var_dump($weather_table) ?>
 <?php //var_dump($weather_table) ?>

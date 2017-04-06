@@ -3,6 +3,6 @@
 namespace app\models;
 use yii\db\ActiveRecord;
 
-class WeatherMoscow extends ActiveRecord
+class Weather extends ActiveRecord
 {
 }

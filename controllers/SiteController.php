@@ -12,48 +12,6 @@ use app\models\EntryForm;
 class SiteController extends Controller
 {
     /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['logout'],
-                'rules' => [
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'logout' => ['post'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-            'captcha' => [
-                'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],
-        ];
-    }
-
-    /**
      * Displays homepage.
      *
      * @return string
@@ -62,22 +20,6 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
-
-//    public function actionEntry()
-//    {
-//        $model = new EntryForm();
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-//            // данные в $model удачно проверены
-//
-//            // делаем что-то полезное с $model ...
-//
-//            return $this->render('entry-confirm', ['model' => $model]);
-//        } else {
-//            // либо страница отображается первый раз, либо есть ошибка в данных
-//            return $this->render('entry', ['model' => $model]);
-//        }
-//    }
 
     public function actionDate()
     {
