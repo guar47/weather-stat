@@ -2,21 +2,83 @@
 
 namespace app\commands;
 
+use app\models\Weather;
 use \yii\console\Controller;
 use yii\httpclient\Client;
 
 
 class WeatherController extends Controller
 {
+    /**
+     * @inheritdoc
+     */
     public function actionIndex()
     {
-//      create http client
         $client = new Client([
             'baseUrl' => 'https://api.awhere.com/',
             'transport' => 'yii\httpclient\CurlTransport'
         ]);
-//      get token
-        $token = $client->createRequest()
+        $token = $this->getToken($client);
+
+//      check created fields
+        $responseFields = $client->createRequest()
+            ->setMethod('get')
+            ->setUrl('v2/fields')
+            ->addHeaders([
+                'Authorization' => 'Bearer ' . $token
+            ])
+            ->send();
+//      create the field if doesn't exist
+        if (count($responseFields->data['fields']) < 1) {
+            $client->createRequest()
+                ->setMethod('post')
+                ->setFormat(Client::FORMAT_JSON)
+                ->setUrl('v2/fields')
+                ->addHeaders([
+                    'Authorization' => 'Bearer ' . $token,
+                    'Content-Type' => 'application/json'
+                ])
+                ->setData([
+                    'id' => '1',
+                    'farmId' => '1',
+                    'centerPoint' => ['latitude' => Weather::MOSCOW_LATITUDE, 'longitude' => Weather::MOSCOW_LONGITUDE]
+                ])
+                ->send();
+        }
+
+        for ($i = 11; $i < 13; $i++) {
+            $timestamp = strtotime('2016-' . $i);
+            $startDate = date('Y-m-01', $timestamp);
+            $endDate = date('Y-m-t', $timestamp);
+
+            $responseWeather2017 = $client->createRequest()
+                ->setMethod('get')
+                ->setUrl('/v2/weather/fields/1/observations/' . $startDate . ',' . $endDate)
+                ->addHeaders([
+                    'Authorization' => 'Bearer ' . $token
+                ])
+                ->send();
+
+            var_dump($responseWeather2017->data);
+
+            foreach ($responseWeather2017->data['observations'] as $dayWeather) {
+                $weather = new Weather();
+                $weather->date = $dayWeather['date'];
+                $weather->hour = 00;
+                $weather->temp = ($dayWeather['temperatures']['max'] + $dayWeather['temperatures']['min']) / 2;
+                $weather->city = 'Moscow';
+                $weather->save();
+            }
+        }
+    }
+
+    /**
+     * @param $http_client
+     * @return string
+     */
+    public function getToken(Client $http_client)
+    {
+        $token = $http_client->createRequest()
             ->setMethod('post')
             ->setUrl('oauth/token')
             ->addHeaders([
@@ -25,41 +87,7 @@ class WeatherController extends Controller
             ])
             ->addData(['grant_type' => 'client_credentials'])
             ->send();
-//      check created fields
-        $response_fields = $client->createRequest()
-            ->setMethod('get')
-            ->setUrl('v2/fields')
-            ->addHeaders([
-                'Authorization' => 'Bearer ' . $token->data['access_token']
-            ])
-            ->send();
-//      create the field if doesn't exist
-        if(count($response_fields->data['fields']) < 1) {
-            $client->createRequest()
-                ->setMethod('post')
-                ->setFormat(Client::FORMAT_JSON)
-                ->setUrl('v2/fields')
-                ->addHeaders([
-                    'Authorization' => 'Bearer ' . $token->data['access_token'],
-                    'Content-Type' => 'application/json'
-                ])
-                ->setData([
-                    'id' => '1',
-                    'farmId' => '1',
-                    'centerPoint' => ['latitude' => 55.753492, 'longitude' => 37.620479]
-                ])
-                ->send();
-        }
 
-        $response_weather = $client->createRequest()
-            ->setMethod('get')
-            ->setUrl('/v2/weather/fields/1/norms/01-01/years/2014,2017')
-            ->addHeaders([
-                'Authorization' => 'Bearer ' . $token->data['access_token']
-            ])
-            ->send();
-
-
-        var_dump($response_weather->data);
+        return $token->data['access_token'];
     }
 }
