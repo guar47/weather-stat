@@ -64,10 +64,10 @@ class WeatherController extends Controller
 
     private function getDataFromApi($city, $startDate, $endDate, $timeInterval, $format)
     {
-        $client = new Client();
+
 
         return $client->createRequest()
-            ->setMethod('get')
+            ->setMethod('post')
             ->setUrl('http://api.worldweatheronline.com/premium/v1/past-weather.ashx')
             ->setData([
                 'key' => 'e3ce250a888b400e83c110545170204',
@@ -100,5 +100,4 @@ class WeatherController extends Controller
             }
         }
     }
-
 }
