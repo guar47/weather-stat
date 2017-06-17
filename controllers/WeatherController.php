@@ -33,20 +33,9 @@ class WeatherController extends Controller
             array_push($indexArray, $dayArray);
         }
 
-        return $this->render('index', [
+        return $this->render('stat', [
             'weatherData' => $weatherData
         ]);
-    }
-
-    public function actionDatabase()
-    {
-        $weather = self::getDataFromApi('Moscow',
-            '2016-01-01', '2016-01-31',
-            '1', 'json');
-
-        self::insertWeatherToDB($weather);
-
-        return $this->render('database');
     }
 
 //    FIXME: function can get $startHour only > 0
@@ -60,44 +49,5 @@ class WeatherController extends Controller
                 }
                 return $average;
             }, 0) / $hourCount);
-    }
-
-    private function getDataFromApi($city, $startDate, $endDate, $timeInterval, $format)
-    {
-
-
-        return $client->createRequest()
-            ->setMethod('post')
-            ->setUrl('http://api.worldweatheronline.com/premium/v1/past-weather.ashx')
-            ->setData([
-                'key' => 'e3ce250a888b400e83c110545170204',
-                'q' => $city,
-                'date' => $startDate,
-                'enddate' => $endDate,
-                'tp' => $timeInterval,
-                'format' => $format
-            ])
-            ->send()->data['data'];
-    }
-
-    private function insertWeatherToDB($weather)
-    {
-        $requestCity = $weather['request']['0']['query'];
-
-        foreach ($weather['weather'] as $dailyWeather) {
-            $date = $dailyWeather['date'];
-
-            foreach ($dailyWeather['hourly'] as $hourlyWeather) {
-                $weatherTable = new Weather();
-                $hour = $hourlyWeather['time'] !== '0' ? substr($hourlyWeather['time'], 0, -2) : '0';
-                $temperature = $hourlyWeather['tempC'];
-
-                $weatherTable->date = $date;
-                $weatherTable->hour = $hour;
-                $weatherTable->temp = $temperature;
-                $weatherTable->city = $requestCity;
-                $weatherTable->save();
-            }
-        }
     }
 }

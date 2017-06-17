@@ -62,8 +62,7 @@ AppAsset::register($this);
             ?>
             <?= '<br>' ?>
             <?= '<br>' ?>
-            <?= Html::a('get statistic', Url::to(['weather/index'], true), ['class'=>'btn btn-primary']); ?>
-            <?= Html::a('add data to DB', Url::to(['weather/database'], true), ['class'=>'btn btn-primary']); ?>
+            <?= Html::a('Get statistic', Url::to(['weather/stat'], true), ['class'=>'btn btn-primary']); ?>
 
         </div>
         <?= $content ?>

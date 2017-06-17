@@ -14,7 +14,18 @@ class DataController extends Controller
      */
     public function actionIndex()
     {
+        for ($month = 1; $month <= 12; $month += 1) {
+            $weatherData = $this->temperatureMoscowGenerator($month);
 
+            foreach ($weatherData as $day => $temp) {
+                $weather = new Weather();
+                $weather->date = date('Y-m-d', strtotime($day . '-' . $month . '-2016'));
+                $weather->hour = 00;
+                $weather->temp = $temp;
+                $weather->city = 'Moscow';
+                $weather->save();
+            }
+        }
     }
 
     /**
@@ -26,69 +37,68 @@ class DataController extends Controller
         $tempsMonth = [];
 
         switch ($month) {
-            case 'January':
+            case 1:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(-10, -5);
                 }
                 break;
-            case 'February':
+            case 2:
                 for ($i = 1; $i <= 28; $i += 1) {
                     $tempsMonth[$i] = rand(-8, -3);
                 }
                 break;
-            case 'March':
+            case 3:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(-3, 3);
                 }
                 break;
-            case 'April':
+            case 4:
                 for ($i = 1; $i <= 30; $i += 1) {
                     $tempsMonth[$i] = rand(3, 11);
                 }
                 break;
-            case 'May':
+            case 5:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(9, 20);
                 }
                 break;
-            case 'June':
+            case 6:
                 for ($i = 1; $i <= 30; $i += 1) {
                     $tempsMonth[$i] = rand(13, 23);
                 }
                 break;
-            case 'July':
+            case 7:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(15, 26);
                 }
                 break;
-            case 'August':
+            case 8:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(14, 24);
                 }
                 break;
-            case 'September':
-                for ($i = 1; $i <= 31; $i += 1) {
+            case 9:
+                for ($i = 1; $i <= 30; $i += 1) {
                     $tempsMonth[$i] = rand(9, 17);
                 }
                 break;
-            case 'October':
+            case 10:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(4, 9);
                 }
                 break;
-            case 'November':
-                for ($i = 1; $i <= 31; $i += 1) {
+            case 11:
+                for ($i = 1; $i <= 30; $i += 1) {
                     $tempsMonth[$i] = rand(0, 3);
                 }
                 break;
-            case 'December':
+            case 12:
                 for ($i = 1; $i <= 31; $i += 1) {
                     $tempsMonth[$i] = rand(-5, -2);
                 }
                 break;
         }
 
-        var_dump($tempsMonth);
         return $tempsMonth;
     }
 }

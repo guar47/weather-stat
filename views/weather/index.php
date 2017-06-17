@@ -1,86 +1,84 @@
 <?php
 
-use yii\jui\DatePicker;
+/* @var $this \yii\web\View */
+/* @var $content string */
+
 use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
+use app\assets\AppAsset;
+use yii\jui\DatePicker;
 use yii\helpers\Url;
 
-$this->title = 'Weather statistics index';
 
+AppAsset::register($this);
 ?>
-<div class="site-index">
-    <br>
-    <table class="table">
-        <thead>
-        <tr>
-            <th></th>
-            <th></th>
-            <th>Январь</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        <tr>
-            <th>Неделя</th>
-            <th>ПН</th>
-            <th>ВТ</th>
-            <th>СР</th>
-            <th>ЧТ</th>
-            <th>ПТ</th>
-            <th>СБ</th>
-            <th>ВС</th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body>
+<?php $this->beginBody() ?>
 
-        echo '<tr>';
-        foreach ($weatherData as $weatherDay) {
-            $tableRow = '<td>' . date('d M', strtotime($weatherDay['date'])) . '(' . $weatherDay['day_temp'] .
-                ' / ' . $weatherDay['night_temp'] . ')' . '</td>';
-            $tableEmpty = '<td>' . '</td>';
-            $tableWeekNumber = '<td>' . $weatherDay['week_number'] . '</td>';
+<div class="wrap">
+    <?php
+    NavBar::begin([
+        'brandLabel' => 'Weather statistics',
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-inverse navbar-fixed-top',
+        ],
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+    ]);
+    NavBar::end();
+    ?>
 
-            if (date('d', strtotime($weatherDay['date'])) === '01') {
-                switch ($weatherDay['week_day']) {
-                    case '0':
-                        echo $tableRow . '</tr>' . '<tr>';
-                        break;
-                    case '1':
-                        echo $tableEmpty . $tableRow;
-                        break;
-                    case '2':
-                        echo $tableEmpty . $tableEmpty . $tableRow;
-                        break;
-                    case '3':
-                        echo $tableEmpty . $tableEmpty . $tableEmpty . $tableRow;
-                        break;
-                    case '4':
-                        echo $tableEmpty . $tableEmpty . $tableEmpty .
-                            $tableEmpty . $tableRow;
-                        break;
-                    case '5':
-                        echo $tableEmpty . $tableEmpty . $tableEmpty .
-                            $tableEmpty . $tableEmpty . $tableRow;
-                        break;
-                    case '6':
-                        echo $tableEmpty . $tableEmpty . $tableEmpty .
-                            $tableEmpty . $tableEmpty . $tableEmpty . $tableRow;
-                        break;
-                }
-            } else {
-                if ($weatherDay['week_day'] === '0') {
-                    echo $tableRow . '</tr>' . '<tr>';
-                } elseif ($weatherDay['week_day'] === '1') {
-                    echo $tableWeekNumber . $tableRow;
-                }
-                else {
-                    echo $tableRow;
-                }
-            }
-        }
-        ?>
-        </tbody>
-    </table>
+    <div class="container">
+        <?= Breadcrumbs::widget([
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]) ?>
+        <div class="site-index">
+
+            <?php
+            echo DatePicker::widget([
+                'attribute' => 'from_date',
+                'value' => '2016-01-01',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+            echo DatePicker::widget([
+                'attribute' => 'to_date',
+                'value' => '2016-02-01',
+                'dateFormat' => 'yyyy-MM-dd',
+            ]);
+            ?>
+            <?= '<br>' ?>
+            <?= '<br>' ?>
+            <?= Html::a('get statistic', Url::to(['weather/index'], true), ['class'=>'btn btn-primary']); ?>
+            <?= Html::a('add data to DB', Url::to(['weather/database'], true), ['class'=>'btn btn-primary']); ?>
+
+        </div>
+        <?= $content ?>
+    </div>
 </div>
+
+<footer class="footer">
+    <div class="container">
+        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
+
+        <p class="pull-right"><?= Yii::powered() ?></p>
+    </div>
+</footer>
+
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

@@ -3,11 +3,19 @@
 namespace app\models;
 use yii\db\ActiveRecord;
 
+/*
+ * @property int $id
+ * @property date $date
+ * @property int $hour
+ * @property int $temp
+ * @property varchar $city
+ */
+
 class Weather extends ActiveRecord
 {
-    const MOSCOW_LATITUDE = 55.753492;
-    const MOSCOW_LONGITUDE = 37.620479;
-
+    /**
+     * @return string
+     */
     public static function tableName()
     {
         return 'weather';

@@ -4,6 +4,6 @@ return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=weather',
     'username' => 'root',
-    'password' => '',
+    'password' => 'kruger',
     'charset' => 'utf8',
 ];
