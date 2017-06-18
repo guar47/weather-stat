@@ -33,12 +33,13 @@ $this->title = 'Weather statistics index';
         </tr>
         </thead>
         <tbody>
+
         <?php
 
         echo '<tr>';
         foreach ($weatherData as $weatherDay) {
-            $tableRow = '<td>' . date('d M', strtotime($weatherDay['date'])) . '(' . $weatherDay['day_temp'] .
-                ' / ' . $weatherDay['night_temp'] . ')' . '</td>';
+            $tableRow = '<td>' . date('d M', strtotime($weatherDay['date']))
+                . ' (' . $weatherDay['temp'] . ')' . '</td>';
             $tableEmpty = '<td>' . '</td>';
             $tableWeekNumber = '<td>' . $weatherDay['week_number'] . '</td>';
 
@@ -74,8 +75,7 @@ $this->title = 'Weather statistics index';
                     echo $tableRow . '</tr>' . '<tr>';
                 } elseif ($weatherDay['week_day'] === '1') {
                     echo $tableWeekNumber . $tableRow;
-                }
-                else {
+                } else {
                     echo $tableRow;
                 }
             }

@@ -1,18 +1,14 @@
 <?php
 
-namespace app\commands;
-
+use yii\db\Migration;
 use app\models\Weather;
-use \yii\console\Controller;
-use yii\httpclient\Client;
 
-
-class DataController extends Controller
+class m170618_131614_initData extends Migration
 {
     /**
      * @inheritdoc
      */
-    public function actionIndex()
+    public function up()
     {
         for ($month = 1; $month <= 12; $month += 1) {
             $weatherData = $this->temperatureMoscowGenerator($month);
@@ -26,6 +22,16 @@ class DataController extends Controller
                 $weather->save();
             }
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function down()
+    {
+        Weather::deleteAll();
+
+        return true;
     }
 
     /**
